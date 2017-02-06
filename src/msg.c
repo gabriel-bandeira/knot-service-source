@@ -279,7 +279,8 @@ static GSList *parse_device_schema(const char *json_str)
 	json_object *jobj, *jobjarray, *jobjentry, *jobjkey;
 	GSList *list = NULL;
 	knot_msg_schema *entry;
-	int sensor_id, value_type, unit, type_id, i;
+	int sensor_id, value_type, unit, type_id;
+	size_t i;
 	const char *name;
 
 	jobj = json_tokener_parse(json_str);
@@ -383,7 +384,8 @@ static GSList *parse_device_config(const char *json_str)
 	json_object *jobj, *jobjarray, *jobjentry, *jobjkey;
 	GSList *list = NULL;
 	struct config *entry;
-	int sensor_id, event_flags, time_sec, i;
+	int sensor_id, event_flags, time_sec;
+	size_t i;
 	knot_value_types lower_limit, upper_limit;
 	json_type jtype;
 
@@ -522,7 +524,8 @@ static GSList *parse_device_setdata(const char *json_str)
 	json_object *jobj, *jobjarray, *jobjentry, *jobjkey;
 	GSList *list = NULL;
 	knot_msg_data *entry;
-	int sensor_id, i;
+	int sensor_id;
+	size_t i;
 	knot_data data;
 	json_type jtype;
 
@@ -612,7 +615,8 @@ static GSList *parse_device_getdata(const char *json_str)
 	json_object *jobj, *jobjarray, *jobjentry, *jobjkey;
 	GSList *list = NULL;
 	knot_msg_data *entry;
-	int sensor_id, i;
+	int sensor_id;
+	size_t i;
 	knot_data data;
 
 	jobj = json_tokener_parse(json_str);
@@ -1254,7 +1258,8 @@ static void update_device_getdata(const struct proto_ops *proto_ops,
 	json_object *ajobj, *setdatajobj;
 	json_raw_t json;
 	const char *jobjstr;
-	int i, err;
+	int err;
+	size_t i;
 
 	memset(&json, 0, sizeof(json));
 	err = proto_ops->fetch(proto_sock, uuid, token, &json);
@@ -1479,7 +1484,8 @@ static void update_device_setdata(const struct proto_ops *proto_ops,
 	json_object *ajobj, *setdatajobj;
 	json_raw_t json;
 	const char *jobjstr;
-	int i, err;
+	int err;
+	size_t i;
 
 	memset(&json, 0, sizeof(json));
 	err = proto_ops->fetch(proto_sock, uuid, token, &json);
