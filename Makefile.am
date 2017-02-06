@@ -1,10 +1,10 @@
-#
-# Copyright (c) 2016, CESAR.
-# All rights reserved.
-#
-# This software may be modified and distributed under the terms
-# of the BSD license. See the LICENSE file for details.
-#
+MKDIR=mkdir
+CP=cp
+GIT=git
+ZIP=zip
+FIND=find
+
+KNOT_SERVICE_DOWNLOAD_DIR = download
 
 AM_MAKEFLAGS = --no-print-directory
 
@@ -50,6 +50,29 @@ DISTCLEANFILES =
 MAINTAINERCLEANFILES = Makefile.in \
 	aclocal.m4 configure config.h.in config.sub config.guess \
 	ltmain.sh depcomp compile missing install-sh
+
+KNOT_HAL_LIB_VERSION = master
+KNOT_HAL_LIB_REPO = knot-hal-source
+KNOT_HAL_LIB_SITE = https://github.com/CESARBR/$(KNOT_HAL_LIB_REPO).git
+KNOT_HAL_HDR_LIB_DIR = ./$(KNOT_SERVICE_DOWNLOAD_DIR)/$(KNOT_HAL_LIB_REPO)/include
+KNOT_HAL_SRC_LIB_DIR = ./$(KNOT_SERVICE_DOWNLOAD_DIR)/$(KNOT_HAL_LIB_REPO)/src/hal
+
+default: all
+
+all:  $(KNOT_HAL_TARGET)
+
+$(KNOT_SERVICE_DOWNLOAD_DIR):
+	$(MKDIR) -p ./$(KNOT_SERVICE_DOWNLOAD_DIR)
+
+$(KNOT_HAL_LIB_DIR):  $(KNOT_SERVICE_DOWNLOAD_DIR)
+	$(GIT) clone -b $(KNOT_HAL_LIB_VERSION) $(KNOT_HAL_LIB_SITE) ./$(KNOT_SERVICE_DOWNLOAD_DIR)/$(KNOT_HAL_LIB_REPO)
+
+$(KNOT_THING_TARGET):  $(KNOT_HAL_LIB_DIR)
+	$(MKDIR) -p ./$(KNOT_SERVICE_DOWNLOAD_DIR)/src/log
+
+	$(CP) -r $(KNOT_HAL_HDR_LIB_DIR)/avr_log.h ./$(KNOT_SERVICE_DOWNLOAD_DIR)/src/log
+
+	$(CP) -r ./$(KNOT_HAL_SRC_LIB_DIR)/log/log_avr.cpp ./$(KNOT_SERVICE_DOWNLOAD_DIR)/src/log
 
 clean-local:
 	$(RM) -r src/knotd tools/ktool unit/ktest
